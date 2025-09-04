@@ -1,0 +1,330 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #000814, #001021); 
+    /* ini buat background utama, dikasih gradasi hitam-biru biar layar kelihatan elegan */
+
+    overflow: hidden; /* biar gak ada scroll yang ganggu */
+    position: relative;
+}
+
+/* kasih tekstur tipis biar background gak polos */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("https://www.transparenttextures.com/patterns/woven.png");
+    opacity: 0.52; /* transparan, biar teksturnya halus */
+    mix-blend-mode: overlay; /* cara campur teksturnya */
+    pointer-events: none; /* biar gak ngeganggu klik */
+    z-index: 0; /* paling belakang */
+}
+
+/* efek cahaya bulat gede di tengah layar */
+body::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160%;
+    height: 160%;
+    background: radial-gradient(circle, rgba(136, 0, 255, 0.679) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(200px); /* biar cahaya lebih lembut */
+    pointer-events: none;
+    z-index: 0;
+    animation: glowPulse 8s ease-in-out infinite; /* animasi cahaya bernafas */
+}
+
+/* animasi cahaya bernafas: kecil → gede → kecil lagi */
+@keyframes glowPulse {
+    0% {
+        opacity: 0.25;
+        transform: translate(-50%, -50%) scale(0.95);
+        filter: blur(180px);
+    }
+    50% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: blur(220px);
+    }
+    100% {
+        opacity: 0.25;
+        transform: translate(-50%, -50%) scale(0.95);
+        filter: blur(180px);
+    }
+}
+
+/* ===== NAVBAR (bagian atas layar) ===== */
+.navbar-custom {
+    position: fixed; /* selalu nempel di atas */
+    top: 0;
+    width: 100%; /* lebarnya full */
+    display: flex;
+    justify-content: space-between; /* kiri dan kanan */
+    align-items: center;
+
+    padding: 11px 20px; /* kasih jarak isi navbar */
+    background: linear-gradient(135deg, #1a142e, #011636);
+    background-size: 200% 200%;
+    animation: navbarGradient 10s ease infinite; /* gradasinya jalan pelan */
+    background-image: url('https://www.transparenttextures.com/patterns/woven.png'), linear-gradient(135deg, #1a142e, #011636); 
+    background-repeat: repeat;
+    background-blend-mode: overlay;
+
+    backdrop-filter: blur(12px); /* efek kaca buram */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* garis bawah tipis */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* kasih bayangan biar kayak ngambang */
+    color: #fff; /* teks putih */
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 1000; /* biar di atas semua elemen lain */
+}
+
+/* animasi gradasi jalan kiri → kanan → kiri */
+@keyframes navbarGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ===== INFO CUACA ===== */
+.weather-info {
+    font-size: 1.8rem; /* gede biar jelas */
+    font-weight: 400;
+    color: #b9d4f3; /* warna biru soft */
+    letter-spacing: 1px;
+    text-shadow: 0 0 4px rgba(255,255,255,0.2); /* ada glow tipis */
+}
+
+/* ===== CLOCK INFO (jam & tanggal di tengah) ===== */
+.clock-info {
+    display: flex;
+    gap: 24px; /* jarak antar elemen */
+    padding: 0.1px 21px;
+    border-radius: 10px;
+
+    /* biar pas beneran di tengah layar */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* garis tipis di bawah jam/tanggal */
+.clock-info::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    width: 90%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgb(0, 128, 255), transparent);
+    animation: lineFade 5s ease-in-out infinite;
+}
+
+/* animasi garis tipis: muncul → hilang → muncul lagi */
+@keyframes lineFade {
+    0%,100% { opacity: 0.2; transform: scaleX(0.9); }
+    50%     { opacity: 0.6; transform: scaleX(1); }
+}
+
+/* style untuk tanggal */
+.clock-info .date {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #b9d4f3;
+    letter-spacing: 1px;
+    text-shadow: 0 0 4px rgba(255,255,255,0.2);
+}
+
+/* style untuk jam, dibuat lebih tebal + glow */
+.clock-info .time {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #b9d4f3;
+    text-shadow: 0 0 10px rgba(200, 220, 255, 0.25), 0 0 20px rgba(200, 220, 255, 0.15);
+    animation: softGlow 4s ease-in-out infinite; /* jam ber-glow halus */
+}
+
+/* animasi glow untuk jam */
+@keyframes softGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(200,220,255,0.25), 0 0 20px rgba(200,220,255,0.15); }
+    50%      { text-shadow: 0 0 20px rgba(200,220,255,0.4), 0 0 30px rgba(200,220,255,0.2); }
+}
+
+/* ===== TOMBOL LOGOUT ===== */
+.logout-btn {
+    background: transparent; /* transparan */
+    border: none;
+    color: #ffffff;
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 6px;
+    opacity: 0.1; /* awalnya hampir ga keliatan */
+    transition: opacity 0.3s ease, color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;
+    position: relative;
+}
+
+/* area sensor di bawah layar, buat munculin watermark/footer */
+.reveal-zone {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* makin tinggi makin gampang hover */
+    z-index: 887;
+    pointer-events: auto;
+}
+
+/* ===== WATERMARK (FOOTER) ===== */
+.footer-custom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #aaa;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 0;
+    z-index: 888;
+
+    opacity: 0; /* awalnya ngilang */
+    transform: translateY(20px); /* geser ke bawah dikit */
+    transition: all 0.4s ease-in-out;
+    pointer-events: none; /* ga bisa di klik pas ngilang */
+}
+
+/* kalau kursor masuk area bawah → watermark muncul */
+.reveal-zone:hover + .footer-custom {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* area sekitar tombol logout masih bisa dihover walau transparan */
+.logout-btn::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 40px;
+    height: 40px;
+}
+
+/* pas tombol logout dihover → muncul merah glow */
+.logout-btn:hover {
+    opacity: 1;
+    color: #ff4d4d;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.9);
+    transform: scale(1.1); /* agak gede dikit */
+}
+
+/* ===== CAROUSEL 3D ===== */
+.carousel-3d-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: calc(100vh - 60px); /* tinggi layar dikurangi navbar */
+    margin-top: 60px; /* kasih jarak dari navbar */
+
+    position: relative;
+    perspective: 1200px; /* kasih efek 3D */
+    z-index: 1;
+}
+
+/* wadah carousel */
+.carousel-3d {
+    position: relative;
+    width: 95vw; /* hampir full layar */
+    max-width: 1300px;
+    height: 80vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* setiap item di carousel */
+.carousel-3d-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 100%;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: all 0.8s ease;
+    opacity: 0;
+    filter: brightness(0.4) grayscale(30%); /* redup + agak abu2 kalau gak aktif */
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* konten di dalam carousel (gambar/video) */
+.carousel-3d-item img,
+.carousel-3d-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* biar gak ketarik aneh */
+    border-radius: 12px;
+}
+
+/* item aktif (yang di tengah) */
+.carousel-3d-item.active {
+    transform: translate(-50%, -50%) scale(1.05); /* agak lebih gede */
+    opacity: 1;
+    filter: none; /* gak redup */
+    z-index: 3;
+}
+
+/* cahaya glow di bawah item aktif */
+.carousel-3d-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 50px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(196, 199, 255, 0.6) 0%,
+        transparent 80%
+    );
+    filter: blur(15px);
+    opacity: 0.8;
+    pointer-events: none;
+    animation: glowPulse 3s ease-in-out infinite; /* cahaya berdenyut */
+}
+
+/* item sebelumnya (kiri) */
+.carousel-3d-item.prev {
+    transform: translate(-80%, -50%) scale(0.9);
+    opacity: 0.2;
+    filter: brightness(0.5);
+    z-index: 2;
+}
+
+/* item berikutnya (kanan) */
+.carousel-3d-item.next {
+    transform: translate(-20%, -50%) scale(0.9);
+    opacity: 0.2;
+    filter: brightness(0.5);
+    z-index: 2;
+}
+
+/* ===== RESPONSIVE (HP/TABLET) ===== */
+@media (max-width: 768px) {
+    .carousel-3d {
+        width: 95vw;
+        height: 50vh; /* lebih kecil biar muat di layar HP */
+    }
+    .carousel-3d-item {
+        width: 85%; /* item lebih kecil */
+    }
+}
